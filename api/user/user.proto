@@ -1,10 +1,35 @@
 syntax = "proto3";
 
-package user;
+package api.user;
 
 import "google/api/annotations.proto";
 
-option go_package = "./";
+option go_package = "helloworld/api/user;user";
+
+service UserService{
+  rpc CreateUser(CreateUserReq)returns (CreateUserRes){
+    option(google.api.http) = {
+      post:"/api/createUser"
+      body:"*"
+    };
+  };
+  rpc GetUserList(GetUserListReq)returns(GetUserListRes){
+    option(google.api.http) = {
+      get:"/api/getUserList"
+    };
+  };
+  rpc SetUserCache(SetUserCacheReq)returns(SetUserCacheRes){
+    option(google.api.http) = {
+      post:"/api/setUserCache"
+      body:"*"
+    };
+  };
+  rpc GetUserCache(GetUserCacheReq)returns(GetUserCacheRes){
+    option(google.api.http) = {
+      get:"/api/getUserCache/{name}"
+    };
+  };
+}
 
 message CreateUserReq{
   int32 id = 1;
@@ -29,17 +54,27 @@ message GetUserListRes{
   repeated User users = 1;
 }
 
-service UserService{
-  rpc CreateUser(CreateUserReq)returns (CreateUserRes){
-    option(google.api.http) = {
-      post:"/api/createUser"
-      body:"*"
-    };
-  };
-  rpc GetUserList(GetUserListReq)returns(GetUserListRes){
-    option(google.api.http) = {
-      get:"/api/getUserList"
-    };
-  };
+message SetUserCacheReq{
+  string name = 1;
+  int32 age = 2;
+  int32 sex = 3;
+  string address = 4;
 }
 
+message SetUserCacheRes{
+  int32 id = 1;
+}
+
+message GetUserCacheReq{
+  string name = 1;
+}
+
+message GetUserCacheRes{
+  message User{
+    string name = 1;
+    int32 age = 2;
+    int32 sex = 3;
+    string address = 4;
+  }
+  map<string, User> users = 1;
+}

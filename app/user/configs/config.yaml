@@ -7,9 +7,11 @@ server:
     timeout: 1s
 data:
   database:
-    driver: mysql
+    driver: dbMysql
     source: root:123456@tcp(192.168.157.129:3306)/test?charset=utf8mb4&parseTime=True&loc=Local
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+  mongo:
+    source: mongodb://root:123456@192.168.157.129:27017

@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.1
-// source: user.proto
+// source: api/user/user.proto
 
-package __
+package user
 
 import (
 	context "context"
@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserRes, error)
 	GetUserList(ctx context.Context, in *GetUserListReq, opts ...grpc.CallOption) (*GetUserListRes, error)
+	SetUserCache(ctx context.Context, in *SetUserCacheReq, opts ...grpc.CallOption) (*SetUserCacheRes, error)
+	GetUserCache(ctx context.Context, in *GetUserCacheReq, opts ...grpc.CallOption) (*GetUserCacheRes, error)
 }
 
 type userServiceClient struct {
@@ -36,7 +38,7 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 
 func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserRes, error) {
 	out := new(CreateUserRes)
-	err := c.cc.Invoke(ctx, "/user.UserService/CreateUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.user.UserService/CreateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +47,25 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserReq, o
 
 func (c *userServiceClient) GetUserList(ctx context.Context, in *GetUserListReq, opts ...grpc.CallOption) (*GetUserListRes, error) {
 	out := new(GetUserListRes)
-	err := c.cc.Invoke(ctx, "/user.UserService/GetUserList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.user.UserService/GetUserList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) SetUserCache(ctx context.Context, in *SetUserCacheReq, opts ...grpc.CallOption) (*SetUserCacheRes, error) {
+	out := new(SetUserCacheRes)
+	err := c.cc.Invoke(ctx, "/api.user.UserService/SetUserCache", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserCache(ctx context.Context, in *GetUserCacheReq, opts ...grpc.CallOption) (*GetUserCacheRes, error) {
+	out := new(GetUserCacheRes)
+	err := c.cc.Invoke(ctx, "/api.user.UserService/GetUserCache", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,6 +78,8 @@ func (c *userServiceClient) GetUserList(ctx context.Context, in *GetUserListReq,
 type UserServiceServer interface {
 	CreateUser(context.Context, *CreateUserReq) (*CreateUserRes, error)
 	GetUserList(context.Context, *GetUserListReq) (*GetUserListRes, error)
+	SetUserCache(context.Context, *SetUserCacheReq) (*SetUserCacheRes, error)
+	GetUserCache(context.Context, *GetUserCacheReq) (*GetUserCacheRes, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -70,6 +92,12 @@ func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserReq
 }
 func (UnimplementedUserServiceServer) GetUserList(context.Context, *GetUserListReq) (*GetUserListRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserList not implemented")
+}
+func (UnimplementedUserServiceServer) SetUserCache(context.Context, *SetUserCacheReq) (*SetUserCacheRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetUserCache not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserCache(context.Context, *GetUserCacheReq) (*GetUserCacheRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserCache not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -94,7 +122,7 @@ func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.UserService/CreateUser",
+		FullMethod: "/api.user.UserService/CreateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).CreateUser(ctx, req.(*CreateUserReq))
@@ -112,10 +140,46 @@ func _UserService_GetUserList_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.UserService/GetUserList",
+		FullMethod: "/api.user.UserService/GetUserList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetUserList(ctx, req.(*GetUserListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_SetUserCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetUserCacheReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).SetUserCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.user.UserService/SetUserCache",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).SetUserCache(ctx, req.(*SetUserCacheReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetUserCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserCacheReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.user.UserService/GetUserCache",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserCache(ctx, req.(*GetUserCacheReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,7 +188,7 @@ func _UserService_GetUserList_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.UserService",
+	ServiceName: "api.user.UserService",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -135,7 +199,15 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetUserList",
 			Handler:    _UserService_GetUserList_Handler,
 		},
+		{
+			MethodName: "SetUserCache",
+			Handler:    _UserService_SetUserCache_Handler,
+		},
+		{
+			MethodName: "GetUserCache",
+			Handler:    _UserService_GetUserCache_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "user.proto",
+	Metadata: "api/user/user.proto",
 }

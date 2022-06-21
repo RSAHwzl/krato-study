@@ -1,7 +1,7 @@
 syntax = "proto3";
-package kratos.api;
+package conf;
 
-option go_package = "helloworld/internal/conf;conf";
+option go_package = "user/internal/conf;conf";
 
 import "google/protobuf/duration.proto";
 
@@ -36,6 +36,10 @@ message Data {
     google.protobuf.Duration read_timeout = 3;
     google.protobuf.Duration write_timeout = 4;
   }
+  message Mongo{
+    string source = 1;
+  }
   Database database = 1;
   Redis redis = 2;
+  Mongo mongo = 3;
 }

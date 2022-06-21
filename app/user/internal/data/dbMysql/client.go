@@ -1,4 +1,4 @@
-package data
+package dbMysql
 
 import (
 	"gorm.io/driver/mysql"
@@ -22,12 +22,12 @@ func NewMysqlRepo(c *conf.Data) *gorm.DB {
 		}),
 	})
 	if err != nil {
-		log.Println("failed to connect mysql:", err)
+		log.Println("failed to connect dbMysql:", err)
 		panic(err)
 	}
 	dbPool, err := db.DB()
 	if err != nil {
-		log.Println("failed to connect mysql:", err)
+		log.Println("failed to connect dbMysql:", err)
 		panic(err)
 	}
 

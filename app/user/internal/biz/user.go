@@ -13,9 +13,18 @@ type User struct {
 	Password string `json:"password"`
 }
 
+type UserCache struct {
+	Name    string `json:"name"`
+	Age     int32  `json:"age"`
+	Sex     int32  `json:"sex"`
+	Address string `json:"address"`
+}
+
 type UserRepo interface {
 	CreateUser(context.Context, *User) *User
 	GetUserList(context.Context) ([]*User, error)
+	SetUserCache(context.Context, *UserCache) int
+	GetUserCache(context.Context, string) ([]*UserCache, error)
 }
 
 type UserUsecase struct {
@@ -38,4 +47,12 @@ func (uc *UserUsecase) CreateUser(ctx context.Context, name, password string) *U
 
 func (uc *UserUsecase) GetUserList(ctx context.Context) ([]*User, error) {
 	return uc.repo.GetUserList(ctx)
+}
+
+func (uc *UserUsecase) SetUserCache(ctx context.Context, u *UserCache) int {
+	return uc.repo.SetUserCache(ctx, u)
+}
+
+func (uc *UserUsecase) GetUserCache(ctx context.Context, name string) ([]*UserCache, error) {
+	return uc.repo.GetUserCache(ctx, name)
 }
